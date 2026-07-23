@@ -134,3 +134,8 @@ async function loadLibrary() {
 }
 
 loadLibrary();
+
+// 旧链接 library.html#gallery → 成片页
+if (location.hash === "#gallery") {
+  location.replace("/TangTang-workbench/gallery.html" + location.search);
+}

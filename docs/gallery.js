@@ -46,7 +46,7 @@ function videoCardHtml(e) {
       ? `poster="${escapeHtml(`/TangTang-workbench/gallery/${id}/poster.jpg`)}"`
       : "";
   const videoSrc =
-    e.videoUrl || e.solfegeUrl || `/TangTang-workbench/gallery/${encodeURIComponent(id)}/solfege.mp4`;
+    e.videoUrl || e.solfegeUrl || `/TangTang-workbench/gallery/${encodeURIComponent(id)}/cello.mp4`;
   const dlCello =
     e.downloadCelloUrl ||
     e.downloadUrl ||

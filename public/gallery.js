@@ -46,7 +46,7 @@ function videoCardHtml(e) {
       ? `poster="${escapeHtml(`/gallery/${id}/poster.jpg`)}"`
       : "";
   const videoSrc =
-    e.videoUrl || e.solfegeUrl || `/gallery/${encodeURIComponent(id)}/solfege.mp4`;
+    e.videoUrl || e.solfegeUrl || `/gallery/${encodeURIComponent(id)}/cello.mp4`;
   const dlCello =
     e.downloadCelloUrl ||
     e.downloadUrl ||
