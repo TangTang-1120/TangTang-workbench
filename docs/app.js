@@ -8,9 +8,6 @@ const statusEl = document.getElementById("status");
 const results = document.getElementById("results");
 const uploadPanel = document.getElementById("upload-panel");
 const again = document.getElementById("again");
-const searchPanel = document.getElementById("home-search-results");
-const searchList = document.getElementById("home-search-list");
-const searchTitle = document.getElementById("home-search-title");
 
 function setFile(file) {
   if (!file) return;
@@ -66,7 +63,6 @@ function showResults(job) {
     { filename: `${title}-指法.json`, album: false }
   );
   results.scrollIntoView({ behavior: "smooth", block: "start" });
-  loadGallery();
 }
 
 async function watchJob(job) {
@@ -132,174 +128,20 @@ again.addEventListener("click", () => {
   fileInput.click();
 });
 
-let galleryEntries = [];
-let galleryQuery = "";
-let showAllPieces = false;
-
-function escapeHtml(s) {
-  return String(s || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function isStaticSite() {
-  return Boolean(document.querySelector('meta[name="tang-static"]'));
-}
-
-function pieceRowHtml(e) {
-  const title = e.title || "成片";
-  const artist = e.artist || "未知歌手";
-  const id = encodeURIComponent(e.id || "");
-  const staticBase = `gallery/${id}`;
-  const dlCello =
-    e.downloadCelloUrl ||
-    e.downloadUrl ||
-    (isStaticSite()
-      ? `${staticBase}/cello.mp4`
-      : `/api/gallery/${id}/download/cello`);
-  const dlSolfege =
-    e.downloadSolfegeUrl ||
-    (isStaticSite()
-      ? `${staticBase}/solfege.mp4`
-      : `/api/gallery/${id}/download/solfege`);
-
-  return `<article class="home-piece-row">
-    <div class="home-piece-copy">
-      <h3>${escapeHtml(title)}</h3>
-      <p>${escapeHtml(artist)}</p>
-    </div>
-    <div class="home-piece-actions">
-      <a class="home-piece-btn home-piece-btn-sol" href="${escapeHtml(dlSolfege)}" data-download-name="${escapeHtml(title + "-跟唱.mp4")}">跟唱</a>
-      <a class="home-piece-btn home-piece-btn-cello" href="${escapeHtml(dlCello)}" data-download-name="${escapeHtml(title + "-大提琴.mp4")}">大提琴</a>
-    </div>
-  </article>`;
-}
-
-function filteredGalleryEntries() {
-  const q = galleryQuery.trim().toLowerCase();
-  if (!q && !showAllPieces) return [];
-  if (!q && showAllPieces) return galleryEntries;
-  return galleryEntries.filter((e) => {
-    const title = String(e.title || "").toLowerCase();
-    const artist = String(e.artist || "").toLowerCase();
-    const id = String(e.id || "").toLowerCase();
-    return title.includes(q) || artist.includes(q) || id.includes(q);
-  });
-}
-
-function renderHomeSearch() {
-  if (!searchPanel || !searchList) return;
-  const q = galleryQuery.trim();
-  const entries = filteredGalleryEntries();
-  const shouldShow = showAllPieces || !!q;
-
-  searchPanel.classList.toggle("hidden", !shouldShow);
-  if (!shouldShow) {
-    searchList.innerHTML = "";
-    return;
-  }
-
-  if (searchTitle) {
-    searchTitle.textContent = q
-      ? `「${q}」· ${entries.length} 首`
-      : `全部成片 · ${entries.length} 首`;
-  }
-
-  if (!entries.length) {
-    searchList.innerHTML = `<p class="home-search-empty">没有匹配的成片</p>`;
-    return;
-  }
-
-  searchList.innerHTML = entries.map((e) => pieceRowHtml(e)).join("");
-  searchList.querySelectorAll("[data-download-name]").forEach((el) => {
-    const href = el.getAttribute("href");
-    const name = el.getAttribute("data-download-name") || "video.mp4";
-    bindDownload(el, href, { filename: name, album: true });
-  });
-}
-
-async function loadStaticGalleryManifest() {
-  const res = await fetch("gallery/manifest.json");
-  if (!res.ok) return [];
-  const data = await res.json();
-  return (Array.isArray(data.entries) ? data.entries : []).map((e) => ({
-    ...e,
-    videoUrl: `gallery/${e.id}/cello.mp4`,
-    solfegeUrl: `gallery/${e.id}/solfege.mp4`,
-    posterUrl: e.hasPoster ? `gallery/${e.id}/poster.jpg` : null,
-    downloadCelloUrl: `gallery/${e.id}/cello.mp4`,
-    downloadSolfegeUrl: `gallery/${e.id}/solfege.mp4`,
-  }));
-}
-
-async function loadGallery() {
-  galleryEntries = [];
-  const staticMode = isStaticSite();
-  try {
-    if (!staticMode) {
-      const res = await fetch("/api/gallery");
-      if (res.ok) {
-        const data = await res.json();
-        galleryEntries = Array.isArray(data.entries) ? data.entries : [];
-      }
-    }
-  } catch {
-    galleryEntries = [];
-  }
-  if (!galleryEntries.length) {
-    try {
-      galleryEntries = await loadStaticGalleryManifest();
-    } catch {
-      galleryEntries = [];
-    }
-  }
-  renderHomeSearch();
-}
-
+/** 首页搜索 → 跳转琴谱库成片区（谱面卡片样式） */
 function bindScoreSearch() {
   const searchForm = document.getElementById("score-search");
   const input = document.getElementById("score-search-input");
   if (!searchForm || !input) return;
 
-  const apply = ({ scroll } = {}) => {
-    galleryQuery = input.value || "";
-    showAllPieces = false;
-    renderHomeSearch();
-    if (scroll && (galleryQuery.trim() || showAllPieces) && searchPanel) {
-      searchPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    apply({ scroll: true });
-  });
-  input.addEventListener("input", () => apply({ scroll: false }));
-}
-
-function bindGalleryNav() {
-  document.querySelectorAll('[data-wb-nav="gallery"]').forEach((el) => {
-    el.addEventListener("click", () => {
-      showAllPieces = true;
-      galleryQuery = "";
-      const input = document.getElementById("score-search-input");
-      if (input) input.value = "";
-      renderHomeSearch();
-      searchPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    const q = (input.value || "").trim();
+    const url = q
+      ? `/library.html?q=${encodeURIComponent(q)}#gallery`
+      : `/library.html#gallery`;
+    window.location.href = url;
   });
 }
 
 bindScoreSearch();
-bindGalleryNav();
-loadGallery().then(() => {
-  if (location.hash === "#home-search-results") {
-    showAllPieces = true;
-    galleryQuery = "";
-    const input = document.getElementById("score-search-input");
-    if (input) input.value = "";
-    renderHomeSearch();
-  }
-});

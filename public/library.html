@@ -37,7 +37,7 @@
             <span class="wb-nav-ico" aria-hidden="true">⌂</span>
             首页
           </a>
-          <a class="wb-nav-item" href="/#home-search-results">
+          <a class="wb-nav-item" href="/library.html#gallery" data-wb-nav="gallery">
             <span class="wb-nav-ico" aria-hidden="true">▣</span>
             成片
           </a>
@@ -45,7 +45,7 @@
             <span class="wb-nav-ico" aria-hidden="true">⬆</span>
             上传出片
           </a>
-          <a class="wb-nav-item is-active" href="/library.html">
+          <a class="wb-nav-item is-active" href="/library.html" data-wb-nav="library">
             <span class="wb-nav-ico" aria-hidden="true">☰</span>
             琴谱库下载
           </a>
@@ -53,6 +53,10 @@
         <div class="wb-product">
           <p class="wb-section-label">功能描述</p>
           <ul class="wb-feature-list">
+            <li>
+              <strong>跟唱 / 大提琴成片</strong>
+              <span>谱面预览 · 一键下载</span>
+            </li>
             <li>
               <strong>下载乐谱</strong>
               <span>MusicXML 一键下载</span>
@@ -64,10 +68,6 @@
             <li>
               <strong>唱音阶跟唱</strong>
               <span>汤汤音色 · 长音哆234</span>
-            </li>
-            <li>
-              <strong>大提琴示范</strong>
-              <span>FluidR3 · 把位染色</span>
             </li>
           </ul>
         </div>
@@ -84,7 +84,7 @@
         </button>
         <div class="wb-topbar-title">
           <strong>琴谱库</strong>
-          <span>下载 MusicXML 谱面</span>
+          <span>成片预览 · MusicXML 下载</span>
         </div>
       </header>
 
@@ -94,12 +94,28 @@
           <p class="brand">Tang Tang <span class="clef" aria-hidden="true">𝄢</span></p>
           <h1>琴谱库</h1>
           <p class="lead library-lead">
-            下载已入库的 MusicXML 谱面。首页上传识别成功后会自动出现在这里。
+            先看谱面成片，再下载跟唱 / 大提琴，或下载 MusicXML 谱面。
           </p>
         </header>
 
-        <p class="library-meta" id="library-meta">加载中…</p>
-        <div class="library-list" id="library-list"></div>
+        <section class="gallery-panel library-gallery" id="gallery">
+          <div class="gallery-head">
+            <p class="gallery-kicker">成片</p>
+            <h2 id="gallery-title">跟唱 · 大提琴</h2>
+            <p class="gallery-save-hint">手机可长按视频另存，或点下方按钮下载。</p>
+          </div>
+          <p class="library-meta" id="gallery-meta">加载中…</p>
+          <div class="video-card-grid" id="gallery-grid"></div>
+        </section>
+
+        <section class="library-scores" id="scores">
+          <div class="gallery-head">
+            <p class="gallery-kicker">谱面</p>
+            <h2>MusicXML 下载</h2>
+          </div>
+          <p class="library-meta" id="library-meta">加载中…</p>
+          <div class="library-list" id="library-list"></div>
+        </section>
       </main>
     </div>
 

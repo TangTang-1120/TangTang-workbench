@@ -2067,6 +2067,56 @@ html[data-theme="light"] .video-card-actions .video-card-dl:last-child {
   color: var(--accent);
 }
 
+html[data-theme="light"] .library-gallery {
+  margin-top: 8px;
+  margin-bottom: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow);
+  overflow: hidden;
+}
+
+html[data-theme="light"] .library-gallery .gallery-head {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--wb-panel-head);
+}
+
+html[data-theme="light"] .library-gallery .library-meta {
+  margin: 0;
+  padding: 10px 16px 0;
+  color: var(--ink-dim);
+  font-size: 0.86rem;
+}
+
+html[data-theme="light"] .library-scores {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow);
+  overflow: hidden;
+}
+
+html[data-theme="light"] .library-scores .gallery-head {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--wb-panel-head);
+}
+
+html[data-theme="light"] .library-scores .library-meta {
+  margin: 0;
+  padding: 10px 16px 0;
+}
+
+html[data-theme="light"] .library-scores .library-list {
+  padding: 12px 14px 16px;
+}
+
 html[data-theme="light"] .video-card-upload {
   border-style: dashed;
   background: repeating-linear-gradient(
@@ -2077,6 +2127,7 @@ html[data-theme="light"] .video-card-upload {
     #f8fafc 16px
   );
 }
+
 
 html[data-theme="light"] .upload-panel-compact {
   padding: 14px 16px 16px;

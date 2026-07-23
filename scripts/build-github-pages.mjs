@@ -168,13 +168,17 @@ for (const rel of walk(DOCS)) {
 }
 
 // 最后再插 base / static 标记（避免 rewrite 把 base 再改一次）
-let html = fs.readFileSync(path.join(DOCS, "index.html"), "utf8");
-if (!html.includes('meta name="tang-static"')) {
-  html = html.replace(
-    "<head>",
-    `<head>\n    <base href="${BASE}" />\n    <meta name="tang-static" content="1" />`
-  );
-  fs.writeFileSync(path.join(DOCS, "index.html"), html);
+for (const name of ["index.html", "library.html", "admin.html"]) {
+  const p = path.join(DOCS, name);
+  if (!fs.existsSync(p)) continue;
+  let html = fs.readFileSync(p, "utf8");
+  if (!html.includes('meta name="tang-static"')) {
+    html = html.replace(
+      "<head>",
+      `<head>\n    <base href="${BASE}" />\n    <meta name="tang-static" content="1" />`
+    );
+    fs.writeFileSync(p, html);
+  }
 }
 
 console.log("Built docs/ for GitHub Pages");
