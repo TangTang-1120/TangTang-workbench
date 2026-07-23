@@ -1,11 +1,16 @@
 /**
- * 手机端尽量把视频存进相册：
- * iOS Safari 只能靠 Web Share（「存储视频」），download 属性无效。
+ * 手机端把成片存进相册：
+ * - 优先 Web Share「存储视频 / 保存到相册」
+ * - 微信等内置浏览器能力差：引导系统浏览器，或长按视频保存
+ * - 普通下载（MusicXML）走打开 / download
  */
 (function (global) {
+  function ua() {
+    return navigator.userAgent || "";
+  }
+
   function isMobileUa() {
-    const ua = navigator.userAgent || "";
-    if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return true;
+    if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua())) return true;
     if (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || "")) {
       return true;
     }
@@ -13,13 +18,15 @@
   }
 
   function isIos() {
-    const ua = navigator.userAgent || "";
-    if (/iPad|iPhone|iPod/.test(ua)) return true;
-    // iPadOS 桌面 UA
+    if (/iPad|iPhone|iPod/.test(ua())) return true;
     if (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || "")) {
       return true;
     }
     return false;
+  }
+
+  function isWeChatLike() {
+    return /MicroMessenger|QQ\//i.test(ua());
   }
 
   function absoluteUrl(url) {
@@ -30,7 +37,6 @@
     }
   }
 
-  /** WebKit 对中文文件名 canShare 常失败，分享时用 ASCII 名 */
   function asciiShareName(filename) {
     const ext = (filename.match(/\.[^.]+$/) || [".mp4"])[0];
     const base = filename.replace(/\.[^.]+$/, "") || "tangtang";
@@ -41,12 +47,133 @@
     return `${safe || "tangtang-video"}${ext}`;
   }
 
-  function bindClassicDownload(el, url) {
+  function showTip(message) {
+    alert(message);
+  }
+
+  function weChatGuide() {
+    showTip(
+      "微信里无法直接存相册。\n\n请点右上角 ··· →「在浏览器中打开」，\n再点「存到照片 / 保存到相册」。\n\n或在本页长按上方视频 →「存储到照片」。"
+    );
+  }
+
+  async function fetchVideoFile(url, filename) {
+    const abs = absoluteUrl(url);
+    const res = await fetch(abs, {
+      credentials: "same-origin",
+      cache: "no-cache",
+      mode: "cors",
+    });
+    if (!res.ok) throw new Error("视频获取失败，请检查网络后重试");
+    const buf = await res.arrayBuffer();
+    if (!buf || buf.byteLength < 1024) {
+      throw new Error("视频文件异常，请稍后重试");
+    }
+    const shareName = asciiShareName(
+      filename.endsWith(".mp4") ? filename : `${filename}.mp4`
+    );
+    return new File([buf], shareName, { type: "video/mp4" });
+  }
+
+  async function shareFileToAlbum(file) {
+    if (!navigator.share) {
+      throw new Error("当前浏览器不支持系统分享");
+    }
+    const payload = {
+      files: [file],
+      title: file.name.replace(/\.mp4$/i, ""),
+    };
+    // iOS canShare 偶发误报，仍直接 share
+    try {
+      if (
+        typeof navigator.canShare === "function" &&
+        !navigator.canShare(payload) &&
+        !navigator.canShare({ files: [file] })
+      ) {
+        /* still try */
+      }
+    } catch {
+      /* ignore */
+    }
+    await navigator.share(payload);
+  }
+
+  async function androidBlobDownload(file) {
+    const url = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+
+  function openVideoForManualSave(url) {
+    const abs = absoluteUrl(url);
+    showTip(
+      "请在打开的视频页：\n• iPhone：点分享 ▢↑ →「存储到照片」\n• 或返回本页，长按视频 →「存储到照片」"
+    );
+    const w = window.open(abs, "_blank", "noopener");
+    if (!w) {
+      // 弹窗被拦：同页跳转
+      location.href = abs;
+    }
+  }
+
+  async function saveMediaToAlbum(url, filename) {
+    if (isWeChatLike()) {
+      weChatGuide();
+      return;
+    }
+
+    const file = await fetchVideoFile(url, filename);
+
+    // 1) 系统分享（iOS「存储到照片」、Android「保存到相册/文件」）
+    if (navigator.share) {
+      try {
+        await shareFileToAlbum(file);
+        return;
+      } catch (err) {
+        if (err && (err.name === "AbortError" || err.name === "NotAllowedError")) {
+          return; // 用户取消
+        }
+        // 继续 fallback
+      }
+    }
+
+    // 2) Android：blob 触发下载（多进「下载」；部分机可进相册）
+    if (!isIos()) {
+      try {
+        await androidBlobDownload(file);
+        showTip("已开始保存。请到「下载」或「相册 / 文件」中查看。");
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+
+    // 3) 打开视频，引导手动存
+    openVideoForManualSave(url);
+  }
+
+  function bindClassicDownload(el, url, filename) {
     const abs = absoluteUrl(url);
     el.href = abs;
-    el.setAttribute("download", "");
+    if (filename) el.setAttribute("download", filename);
+    else el.setAttribute("download", "");
+
     el.onclick = (e) => {
       if (!isMobileUa()) return;
+
+      // 微信内：乐谱也很难下
+      if (isWeChatLike()) {
+        e.preventDefault();
+        weChatGuide();
+        return;
+      }
+
       if (isIos()) {
         e.preventDefault();
         window.open(abs, "_blank", "noopener");
@@ -54,66 +181,8 @@
     };
   }
 
-  async function fetchVideoFile(url, filename) {
-    const abs = absoluteUrl(url);
-    const res = await fetch(abs, { credentials: "same-origin", cache: "no-cache" });
-    if (!res.ok) throw new Error("视频获取失败，请检查网络后重试");
-    const buf = await res.arrayBuffer();
-    const type = "video/mp4";
-    const shareName = asciiShareName(filename.endsWith(".mp4") ? filename : `${filename}.mp4`);
-    return new File([buf], shareName, { type });
-  }
-
-  async function shareFileToAlbum(file) {
-    if (!navigator.share) {
-      throw new Error("当前浏览器不支持系统分享");
-    }
-
-    const payload = { files: [file], title: file.name.replace(/\.mp4$/i, "") };
-
-    // iOS：canShare 有时误报 false，仍应直接尝试 share
-    if (typeof navigator.canShare === "function") {
-      try {
-        if (!navigator.canShare(payload) && !navigator.canShare({ files: [file] })) {
-          // 仍尝试一次；失败再走 fallback
-        }
-      } catch {
-        /* ignore canShare quirks */
-      }
-    }
-
-    await navigator.share(payload);
-  }
-
-  function iosFallbackOpen(url) {
-    const abs = absoluteUrl(url);
-    alert(
-      "请在弹出的页面里点分享按钮 ▢↑，再选「存储到照片」。\n\n也可以回到本页，长按上方视频 →「存储到照片」。"
-    );
-    window.open(abs, "_blank", "noopener");
-  }
-
-  async function saveMediaToAlbum(url, filename) {
-    const file = await fetchVideoFile(url, filename);
-
-    try {
-      await shareFileToAlbum(file);
-      return;
-    } catch (err) {
-      if (err && (err.name === "AbortError" || err.name === "NotAllowedError")) {
-        // 用户取消分享面板
-        return;
-      }
-      // iOS 分享失败时走明确指引
-      if (isIos()) {
-        iosFallbackOpen(url);
-        return;
-      }
-      throw err;
-    }
-  }
-
   function bindDownload(el, url, opts = {}) {
+    if (!el || !url) return;
     const filename = opts.filename || "video.mp4";
     const wantAlbum =
       opts.album === true ||
@@ -122,13 +191,16 @@
     const abs = absoluteUrl(url);
 
     if (mobile && wantAlbum) {
-      if (!el.dataset.origLabel) el.dataset.origLabel = el.textContent;
+      if (!el.dataset.origLabel) el.dataset.origLabel = el.textContent.trim();
       el.textContent = isIos() ? "存到照片" : "保存到相册";
       el.removeAttribute("download");
       el.href = abs;
+      el.setAttribute("role", "button");
       el.onclick = async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (el.getAttribute("aria-busy") === "true") return;
+
         const prev = el.textContent;
         el.textContent = "准备中…";
         el.setAttribute("aria-busy", "true");
@@ -141,12 +213,14 @@
           ) {
             return;
           }
-          if (isIos()) {
-            iosFallbackOpen(abs);
+          if (isWeChatLike()) {
+            weChatGuide();
+          } else if (isIos()) {
+            openVideoForManualSave(abs);
           } else {
-            alert(
+            showTip(
               (err && err.message) ||
-                "请在弹出的菜单里选择保存；若没有，可长按上方视频保存"
+                "保存失败。请长按上方视频，选择「保存视频 / 下载」。"
             );
             window.open(abs, "_blank", "noopener");
           }
@@ -158,12 +232,13 @@
       return;
     }
 
-    bindClassicDownload(el, abs);
+    bindClassicDownload(el, abs, filename);
   }
 
   global.TangDownload = {
     isMobileUa,
     isIos,
+    isWeChatLike,
     bindDownload,
     saveMediaToAlbum,
   };

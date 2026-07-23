@@ -2366,7 +2366,10 @@ html[data-theme="light"] .library-gallery .gallery-head h2 {
 }
 
 html[data-theme="light"] .library-gallery .gallery-save-hint {
+  display: block;
   color: var(--ink-dim);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 html[data-theme="light"] .library-gallery .library-meta {
