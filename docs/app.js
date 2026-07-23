@@ -144,16 +144,26 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+function isStaticSite() {
+  return Boolean(document.querySelector('meta[name="tang-static"]'));
+}
+
 function pieceRowHtml(e) {
   const title = e.title || "成片";
   const artist = e.artist || "未知歌手";
+  const id = encodeURIComponent(e.id || "");
+  const staticBase = `gallery/${id}`;
   const dlCello =
     e.downloadCelloUrl ||
     e.downloadUrl ||
-    `/api/gallery/${encodeURIComponent(e.id)}/download/cello`;
+    (isStaticSite()
+      ? `${staticBase}/cello.mp4`
+      : `/api/gallery/${id}/download/cello`);
   const dlSolfege =
     e.downloadSolfegeUrl ||
-    `/api/gallery/${encodeURIComponent(e.id)}/download/solfege`;
+    (isStaticSite()
+      ? `${staticBase}/solfege.mp4`
+      : `/api/gallery/${id}/download/solfege`);
 
   return `<article class="home-piece-row">
     <div class="home-piece-copy">
@@ -210,16 +220,40 @@ function renderHomeSearch() {
   });
 }
 
+async function loadStaticGalleryManifest() {
+  const res = await fetch("gallery/manifest.json");
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (Array.isArray(data.entries) ? data.entries : []).map((e) => ({
+    ...e,
+    videoUrl: `gallery/${e.id}/cello.mp4`,
+    solfegeUrl: `gallery/${e.id}/solfege.mp4`,
+    posterUrl: e.hasPoster ? `gallery/${e.id}/poster.jpg` : null,
+    downloadCelloUrl: `gallery/${e.id}/cello.mp4`,
+    downloadSolfegeUrl: `gallery/${e.id}/solfege.mp4`,
+  }));
+}
+
 async function loadGallery() {
   galleryEntries = [];
+  const staticMode = isStaticSite();
   try {
-    const res = await fetch("/api/gallery");
-    if (res.ok) {
-      const data = await res.json();
-      galleryEntries = Array.isArray(data.entries) ? data.entries : [];
+    if (!staticMode) {
+      const res = await fetch("/api/gallery");
+      if (res.ok) {
+        const data = await res.json();
+        galleryEntries = Array.isArray(data.entries) ? data.entries : [];
+      }
     }
   } catch {
     galleryEntries = [];
+  }
+  if (!galleryEntries.length) {
+    try {
+      galleryEntries = await loadStaticGalleryManifest();
+    } catch {
+      galleryEntries = [];
+    }
   }
   renderHomeSearch();
 }
