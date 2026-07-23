@@ -1,6 +1,6 @@
 /**
  * 手机端把成片存进相册：
- * 跳转专用保存页 → Web Share「存储到照片」；失败则打开原生 mp4。
+ * 跳转专用保存页 → Web Share「存储到照片」；失败则引导长按视频（绝不跳进无保存入口的系统播放器）。
  */
 (function (global) {
   function ua() {
@@ -78,7 +78,7 @@
     const abs = absoluteUrl(url);
     const res = await fetch(abs, {
       credentials: "same-origin",
-      cache: "no-cache",
+      cache: "force-cache",
       mode: "cors",
     });
     if (!res.ok) throw new Error("视频获取失败");
@@ -93,6 +93,9 @@
   async function shareFileToAlbum(file) {
     if (!navigator.share) throw new Error("不支持系统分享");
     const payload = { files: [file], title: file.name.replace(/\.mp4$/i, "") };
+    if (navigator.canShare && !navigator.canShare(payload)) {
+      throw new Error("无法分享此视频文件");
+    }
     await navigator.share(payload);
   }
 
@@ -108,6 +111,10 @@
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   }
 
+  /**
+   * @returns {"shared"|"cancelled"|"downloaded"}
+   * 注意：不再 location.href 跳到裸 mp4（系统播放器没有「存相册」入口）
+   */
   async function saveMediaToAlbum(url, filename) {
     if (isWeChatLike()) {
       throw new Error("WECHAT");
@@ -123,21 +130,17 @@
         if (err && (err.name === "AbortError" || err.name === "NotAllowedError")) {
           return "cancelled";
         }
+        // share 失败则继续尝试 Android 下载
       }
     }
 
     if (!isIos()) {
-      try {
-        await androidBlobDownload(file);
-        return "downloaded";
-      } catch {
-        /* fall through */
-      }
+      await androidBlobDownload(file);
+      return "downloaded";
     }
 
-    // 原生打开 mp4：系统播放器里分享 → 存储到照片（最稳）
-    location.href = absoluteUrl(url);
-    return "opened";
+    // iOS：分享失败时交给页面引导「长按视频」
+    throw new Error("NEED_LONG_PRESS");
   }
 
   function bindClassicDownload(el, url, filename) {
@@ -150,11 +153,6 @@
       if (isWeChatLike()) {
         e.preventDefault();
         alert("微信里请点右上角 ··· →「在浏览器中打开」后再下载。");
-        return;
-      }
-      if (isIos()) {
-        e.preventDefault();
-        window.open(abs, "_blank", "noopener");
       }
     };
   }
@@ -170,11 +168,9 @@
     const abs = absoluteUrl(url);
 
     if (mobile && wantAlbum) {
-      if (!el.dataset.origLabel) el.dataset.origLabel = el.textContent.trim();
       el.textContent = isIos() ? "存到照片" : "保存到相册";
       el.removeAttribute("download");
-      // 直接去专用保存页（比卡片里点按钮可靠得多）
-      el.href = savePageUrl(abs, filename, title);
+      el.setAttribute("href", savePageUrl(abs, filename, title));
       el.onclick = null;
       return;
     }
