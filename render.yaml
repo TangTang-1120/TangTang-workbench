@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: tangtang-workbench
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install --omit=dev
+    startCommand: node src/server.mjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: USE_OEMER
+        value: "0"
+      - key: NODE_VERSION
+        value: "22.14.0"

@@ -1,0 +1,56 @@
+{
+  "entries": [
+    {
+      "id": "kongkong-demo",
+      "title": "空拍跟唱示范",
+      "artist": "Tang Tang",
+      "hasPoster": true,
+      "addedAt": 1784772435756,
+      "updatedAt": 1784772435756
+    },
+    {
+      "id": "c-major-scale",
+      "title": "C大调音阶",
+      "artist": "Tang Tang",
+      "hasPoster": true,
+      "addedAt": 1784772432246,
+      "updatedAt": 1784772432246
+    },
+    {
+      "id": "moon-river-multi",
+      "title": "Moon River",
+      "artist": "Henry Mancini",
+      "hasPoster": true,
+      "posLabel": "多把位",
+      "addedAt": 1784700580257,
+      "updatedAt": 1784772313534
+    },
+    {
+      "id": "first-love",
+      "title": "First Love",
+      "artist": "宇多田光",
+      "hasPoster": true,
+      "posLabel": "多把位",
+      "addedAt": 1784700580257,
+      "updatedAt": 1784772370891
+    },
+    {
+      "id": "hao-jiu-bu-jian",
+      "title": "好久不见",
+      "artist": "陈奕迅",
+      "hasPoster": true,
+      "posLabel": "一把位",
+      "addedAt": 1784700580257,
+      "updatedAt": 1784772370941
+    },
+    {
+      "id": "yi-bu-zhi-yao",
+      "title": "一步之遥",
+      "artist": "Carlos Gardel",
+      "hasPoster": true,
+      "posLabel": "一把位",
+      "addedAt": 1784700580257,
+      "updatedAt": 1784772427962
+    }
+  ]
+}

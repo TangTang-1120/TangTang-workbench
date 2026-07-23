@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>琴谱库 · Tang Tang 𝄢</title>
+    <link rel="icon" type="image/png" href="/TangTang-score-video/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/TangTang-score-video/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Serif+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/TangTang-score-video/styles.css" />
+    <script src="/TangTang-score-video/theme.js"></script>
+  </head>
+  <body class="is-workbench">
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <aside class="wb-sidebar" id="wb-sidebar" aria-label="Tang Tang 工作台侧栏">
+      <div class="wb-sidebar-top">
+        <a class="wb-brand" href="/TangTang-score-video/">
+          <span class="wb-brand-mark" aria-hidden="true">𝄢</span>
+          <span class="wb-brand-text">
+            <strong>Tang Tang</strong>
+            <em>大提琴跟谱工作台</em>
+          </span>
+        </a>
+        <p class="wb-section-label">功能</p>
+        <nav class="wb-nav" aria-label="功能导航">
+          <a class="wb-nav-item" href="/TangTang-score-video/">
+            <span class="wb-nav-ico" aria-hidden="true">⌂</span>
+            首页
+          </a>
+          <a class="wb-nav-item" href="/TangTang-score-video/#home-search-results">
+            <span class="wb-nav-ico" aria-hidden="true">▣</span>
+            成片
+          </a>
+          <a class="wb-nav-item" href="/TangTang-score-video/#upload-panel">
+            <span class="wb-nav-ico" aria-hidden="true">⬆</span>
+            上传出片
+          </a>
+          <a class="wb-nav-item is-active" href="/TangTang-score-video/library.html">
+            <span class="wb-nav-ico" aria-hidden="true">☰</span>
+            琴谱库下载
+          </a>
+        </nav>
+        <div class="wb-product">
+          <p class="wb-section-label">功能描述</p>
+          <ul class="wb-feature-list">
+            <li>
+              <strong>下载乐谱</strong>
+              <span>MusicXML 一键下载</span>
+            </li>
+            <li>
+              <strong>识谱入库</strong>
+              <span>上传识别后自动进库</span>
+            </li>
+            <li>
+              <strong>唱音阶跟唱</strong>
+              <span>汤汤音色 · 长音哆234</span>
+            </li>
+            <li>
+              <strong>大提琴示范</strong>
+              <span>FluidR3 · 把位染色</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="wb-sidebar-foot">
+        <p class="wb-foot-hint">MusicXML / PNG 均可识别出片</p>
+      </div>
+    </aside>
+
+    <div class="wb-main">
+      <header class="wb-topbar" aria-hidden="true">
+        <button type="button" class="wb-menu-btn" id="wb-menu-btn" aria-label="打开侧栏">
+          ☰
+        </button>
+        <div class="wb-topbar-title">
+          <strong>琴谱库</strong>
+          <span>下载 MusicXML 谱面</span>
+        </div>
+      </header>
+
+      <main class="shell library-shell">
+        <header class="library-header">
+          <a class="library-back" href="/TangTang-score-video/">← 返回</a>
+          <p class="brand">Tang Tang <span class="clef" aria-hidden="true">𝄢</span></p>
+          <h1>琴谱库</h1>
+          <p class="lead library-lead">
+            下载已入库的 MusicXML 谱面。首页上传识别成功后会自动出现在这里。
+          </p>
+        </header>
+
+        <p class="library-meta" id="library-meta">加载中…</p>
+        <div class="library-list" id="library-list"></div>
+      </main>
+    </div>
+
+    <div class="wb-backdrop" id="wb-backdrop" hidden></div>
+    <script src="/TangTang-score-video/download.js"></script>
+    <script src="/TangTang-score-video/library.js"></script>
+    <script src="/TangTang-score-video/workbench.js"></script>
+  </body>
+</html>

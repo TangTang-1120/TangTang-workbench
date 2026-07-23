@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Tang Tang 𝄢</title>
+    <link rel="icon" type="image/png" href="favicon-32.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Serif+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="theme.js"></script>
+  </head>
+  <body class="is-workbench">
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <aside class="wb-sidebar" id="wb-sidebar" aria-label="Tang Tang 工作台侧栏">
+      <div class="wb-sidebar-top">
+        <a class="wb-brand" href="/">
+          <span class="wb-brand-mark" aria-hidden="true">𝄢</span>
+          <span class="wb-brand-text">
+            <strong>Tang Tang</strong>
+            <em>大提琴跟谱工作台</em>
+          </span>
+        </a>
+
+        <p class="wb-section-label">功能</p>
+        <nav class="wb-nav" aria-label="功能导航">
+          <a class="wb-nav-item is-active" href="#hero-banner" data-wb-nav="home">
+            <span class="wb-nav-ico" aria-hidden="true">⌂</span>
+            首页
+          </a>
+          <a class="wb-nav-item" href="#home-search-results" data-wb-nav="gallery">
+            <span class="wb-nav-ico" aria-hidden="true">▣</span>
+            成片
+          </a>
+          <button type="button" class="wb-nav-item" id="wb-nav-upload" data-wb-nav="upload">
+            <span class="wb-nav-ico" aria-hidden="true">⬆</span>
+            上传出片
+          </button>
+          <a class="wb-nav-item" href="/library.html" data-wb-nav="library">
+            <span class="wb-nav-ico" aria-hidden="true">☰</span>
+            琴谱库下载
+          </a>
+        </nav>
+
+        <div class="wb-product">
+          <p class="wb-section-label">功能描述</p>
+          <ul class="wb-feature-list">
+            <li>
+              <strong>唱音阶跟唱</strong>
+              <span>汤汤音色 · 长音哆234</span>
+            </li>
+            <li>
+              <strong>大提琴示范</strong>
+              <span>FluidR3 · 把位染色</span>
+            </li>
+            <li>
+              <strong>指法识别</strong>
+              <span>一把紫 · 中把青 · 高把蓝</span>
+            </li>
+            <li>
+              <strong>固定速度</strong>
+              <span>♩ = 72</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="wb-sidebar-foot">
+        <p class="wb-foot-hint">MusicXML / PNG 均可识别出片</p>
+      </div>
+    </aside>
+
+    <div class="wb-main">
+      <header class="wb-topbar" aria-hidden="true">
+        <button type="button" class="wb-menu-btn" id="wb-menu-btn" aria-label="打开侧栏">
+          ☰
+        </button>
+        <div class="wb-topbar-title">
+          <strong>首页</strong>
+          <span>乐谱大提琴 · 搜索曲目</span>
+        </div>
+        <label class="wb-topbar-upload" for="file">＋ 上传谱面</label>
+      </header>
+
+      <main class="shell">
+        <header class="hero-banner" id="hero-banner">
+          <div class="hero-copy">
+            <p class="brand">Tang Tang <span class="clef" aria-hidden="true">𝄢</span></p>
+            <form class="score-search" id="score-search" role="search" autocomplete="off">
+              <div class="score-search-staff" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+              <label class="score-search-label" for="score-search-input">
+                <span class="score-search-clef" aria-hidden="true">𝄞</span>
+                <span class="sr-only">搜索曲目</span>
+              </label>
+              <input
+                id="score-search-input"
+                class="score-search-input"
+                type="search"
+                name="q"
+                placeholder="搜曲名、歌手…"
+                enterkeyhint="search"
+              />
+              <button type="submit" class="score-search-go" aria-label="搜索">
+                <span aria-hidden="true">♪</span>
+              </button>
+            </form>
+          </div>
+
+          <div class="hero-visual" id="hero-visual">
+            <div
+              class="score-cello-stage"
+              id="score-cello-stage"
+              role="application"
+              aria-label="乐谱大提琴：居中滑动推动音符"
+            >
+              <canvas id="score-cello-canvas" class="score-cello-canvas"></canvas>
+            </div>
+          </div>
+        </header>
+
+        <section
+          class="home-search-results hidden"
+          id="home-search-results"
+          aria-live="polite"
+        >
+          <div class="home-search-head">
+            <p class="home-search-kicker">搜索结果</p>
+            <h2 id="home-search-title">成片</h2>
+          </div>
+          <div class="home-search-list" id="home-search-list"></div>
+        </section>
+
+        <section class="panel upload-panel-compact" id="upload-panel">
+          <form id="form">
+            <label class="sr-only" id="drop" for="file">上传谱面</label>
+            <input
+              id="file"
+              name="score"
+              type="file"
+              accept=".musicxml,.xml,.png,.jpg,.jpeg,.webp,image/*,application/xml,text/xml"
+              hidden
+            />
+            <span class="file-name" id="file-name"></span>
+            <button type="submit" class="cta" id="submit" hidden disabled>开始输出</button>
+          </form>
+          <p class="hint" id="upload-hint">
+            点上方「上传」卡片添加谱面 · PNG / MusicXML 均可
+          </p>
+        </section>
+
+        <section class="progress hidden" id="progress">
+          <div class="bar"><i id="bar"></i></div>
+          <p id="status">准备中…</p>
+        </section>
+
+        <section class="results hidden" id="results">
+          <h2 id="piece-title">输出成品</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>唱音阶</h3>
+              <video id="v-solfege" controls playsinline></video>
+              <a class="dl btn-dl" id="dl-solfege" href="#">下载唱音阶</a>
+            </article>
+            <article class="card">
+              <h3>大提琴 · 指法</h3>
+              <video id="v-cello" controls playsinline></video>
+              <a class="dl btn-dl" id="dl-cello" href="#">下载大提琴</a>
+            </article>
+          </div>
+          <p class="hint fingering-hint">
+            画面：白谱纸 · 复古洋红＝当前音 · 青绿＝一把位 · 复古橘红＝中把位 · 亮洋红＝高把／拇指
+          </p>
+          <a class="dl btn-dl wide" id="dl-fingerings" href="#">下载指法表（JSON）</a>
+          <button type="button" class="ghost" id="again">再传一首</button>
+        </section>
+      </main>
+    </div>
+
+    <div class="wb-backdrop" id="wb-backdrop" hidden></div>
+
+    <script src="download.js"></script>
+    <script src="score-cello.js"></script>
+    <script src="app.js"></script>
+    <script src="workbench.js"></script>
+  </body>
+</html>
