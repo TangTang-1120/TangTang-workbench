@@ -1,7 +1,9 @@
 /**
- * 浅色工作台：侧栏导航 / 移动端抽屉
+ * 浅色工作台：侧栏导航 / 桌面收起 / 移动端抽屉
  */
 (function () {
+  const STORAGE_KEY = "tangtang-wb-sidebar-collapsed";
+
   function ready(fn) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn);
@@ -10,10 +12,15 @@
     }
   }
 
+  function isMobile() {
+    return window.matchMedia("(max-width: 900px)").matches;
+  }
+
   ready(() => {
     const sidebar = document.getElementById("wb-sidebar");
     const backdrop = document.getElementById("wb-backdrop");
     const menuBtn = document.getElementById("wb-menu-btn");
+    const collapseBtn = document.getElementById("wb-collapse-btn");
     const uploadBtn = document.getElementById("wb-nav-upload");
     const fileInput = document.getElementById("file");
 
@@ -27,10 +34,62 @@
       if (backdrop) backdrop.hidden = false;
     }
 
-    menuBtn?.addEventListener("click", () => {
-      if (document.body.classList.contains("wb-drawer-open")) closeDrawer();
-      else openDrawer();
+    function setCollapsed(collapsed) {
+      document.body.classList.toggle("wb-sidebar-collapsed", collapsed);
+      try {
+        localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
+      if (collapseBtn) {
+        collapseBtn.setAttribute(
+          "aria-label",
+          collapsed ? "展开侧栏" : "收起侧栏"
+        );
+        collapseBtn.setAttribute("title", collapsed ? "展开侧栏" : "收起侧栏");
+        collapseBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+      }
+      if (menuBtn && !isMobile()) {
+        menuBtn.setAttribute(
+          "aria-label",
+          collapsed ? "展开侧栏" : "收起侧栏"
+        );
+      }
+    }
+
+    function toggleCollapsed() {
+      setCollapsed(!document.body.classList.contains("wb-sidebar-collapsed"));
+    }
+
+    // 恢复桌面收起状态
+    try {
+      if (!isMobile() && localStorage.getItem(STORAGE_KEY) === "1") {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    } catch {
+      setCollapsed(false);
+    }
+
+    collapseBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (isMobile()) {
+        closeDrawer();
+        return;
+      }
+      toggleCollapsed();
     });
+
+    menuBtn?.addEventListener("click", () => {
+      if (isMobile()) {
+        if (document.body.classList.contains("wb-drawer-open")) closeDrawer();
+        else openDrawer();
+        return;
+      }
+      toggleCollapsed();
+    });
+
     backdrop?.addEventListener("click", closeDrawer);
 
     uploadBtn?.addEventListener("click", () => {
@@ -48,6 +107,19 @@
         }
         closeDrawer();
       });
+    });
+
+    window.addEventListener("resize", () => {
+      if (isMobile()) {
+        document.body.classList.remove("wb-sidebar-collapsed");
+      } else {
+        closeDrawer();
+        try {
+          setCollapsed(localStorage.getItem(STORAGE_KEY) === "1");
+        } catch {
+          /* ignore */
+        }
+      }
     });
   });
 })();

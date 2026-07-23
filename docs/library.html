@@ -26,30 +26,42 @@
 
     <aside class="wb-sidebar" id="wb-sidebar" aria-label="Tang Tang 工作台侧栏">
       <div class="wb-sidebar-top">
-        <a class="wb-brand" href="/TangTang-workbench/">
-          <span class="wb-brand-mark" aria-hidden="true">𝄢</span>
-          <span class="wb-brand-text">
-            <strong>Tang Tang</strong>
-            <em>大提琴跟谱工作台</em>
-          </span>
-        </a>
+        <div class="wb-brand-row">
+          <a class="wb-brand" href="/TangTang-workbench/">
+            <span class="wb-brand-mark" aria-hidden="true">𝄢</span>
+            <span class="wb-brand-text">
+              <strong>Tang Tang</strong>
+              <em>大提琴跟谱工作台</em>
+            </span>
+          </a>
+          <button
+            type="button"
+            class="wb-collapse-btn"
+            id="wb-collapse-btn"
+            aria-label="收起侧栏"
+            title="收起侧栏"
+            aria-expanded="true"
+          >
+            <span aria-hidden="true">⟨</span>
+          </button>
+        </div>
         <p class="wb-section-label">功能</p>
         <nav class="wb-nav" aria-label="功能导航">
-          <a class="wb-nav-item" href="/TangTang-workbench/">
+          <a class="wb-nav-item" href="/TangTang-workbench/" title="首页">
             <span class="wb-nav-ico" aria-hidden="true">⌂</span>
-            首页
+            <span class="wb-nav-label">首页</span>
           </a>
-          <a class="wb-nav-item" href="/TangTang-workbench/gallery.html" data-wb-nav="gallery">
+          <a class="wb-nav-item" href="/TangTang-workbench/gallery.html" data-wb-nav="gallery" title="成片">
             <span class="wb-nav-ico" aria-hidden="true">▣</span>
-            成片
+            <span class="wb-nav-label">成片</span>
           </a>
-          <a class="wb-nav-item" href="/TangTang-workbench/#upload-panel">
+          <a class="wb-nav-item" href="/TangTang-workbench/#upload-panel" title="上传出片">
             <span class="wb-nav-ico" aria-hidden="true">⬆</span>
-            上传出片
+            <span class="wb-nav-label">上传出片</span>
           </a>
-          <a class="wb-nav-item is-active" href="/TangTang-workbench/library.html" data-wb-nav="library">
+          <a class="wb-nav-item is-active" href="/TangTang-workbench/library.html" data-wb-nav="library" title="琴谱库下载">
             <span class="wb-nav-ico" aria-hidden="true">☰</span>
-            琴谱库下载
+            <span class="wb-nav-label">琴谱库下载</span>
           </a>
         </nav>
         <div class="wb-product">
@@ -80,8 +92,8 @@
     </aside>
 
     <div class="wb-main">
-      <header class="wb-topbar" aria-hidden="true">
-        <button type="button" class="wb-menu-btn" id="wb-menu-btn" aria-label="打开侧栏">
+      <header class="wb-topbar">
+        <button type="button" class="wb-menu-btn" id="wb-menu-btn" aria-label="收起侧栏" title="收起 / 展开侧栏">
           ☰
         </button>
         <div class="wb-topbar-title">

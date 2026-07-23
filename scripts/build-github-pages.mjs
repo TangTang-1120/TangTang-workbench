@@ -62,7 +62,7 @@ function rewriteSitePaths(text) {
   // JS 字符串里的静态资源路径
   out = out.replace(
     new RegExp(
-      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|hero-cello\\.js|admin\\.js|library\\.js)`,
+      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|hero-cello\\.js|score-cello\\.js|theme\\.js|workbench\\.js|gallery\\.js|admin\\.js|library\\.js)`,
       "g"
     ),
     (_, q, rest) => `${q}${BASE}${rest}`

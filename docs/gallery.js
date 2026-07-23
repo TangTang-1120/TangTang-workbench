@@ -1,5 +1,5 @@
 /**
- * 成片页：早期首页竖屏卡片（poster + video + 跟唱/大提琴）
+ * 成片页：琴谱库曲目全部以早期竖屏卡片展示（上传 + 跟唱/大提琴）
  */
 const grid = document.getElementById("gallery-grid");
 const galleryMeta = document.getElementById("gallery-meta");
@@ -35,7 +35,16 @@ function queryParam(name) {
   }
 }
 
-/** 早期首页卡片样式 */
+function uploadCardHtml() {
+  return `<a class="video-card video-card-upload" href="/TangTang-workbench/#upload-panel" aria-label="上传谱面">
+    <div class="video-card-upload-inner">
+      <span class="video-card-upload-plus" aria-hidden="true">+</span>
+      <strong>上传</strong>
+      <span>谱面 PNG / MusicXML</span>
+    </div>
+  </a>`;
+}
+
 function videoCardHtml(e) {
   const title = e.title || "成片";
   const artist = e.artist || "未知歌手";
@@ -75,10 +84,10 @@ function videoCardHtml(e) {
       </h3>
       <p class="video-card-artist">${escapeHtml(artist)}</p>
       <div class="video-card-actions">
-        <a class="video-card-dl btn-dl" href="${escapeHtml(dlSolfege)}" data-download-name="${escapeHtml(
+        <a class="video-card-dl" href="${escapeHtml(dlSolfege)}" data-download-name="${escapeHtml(
           title + "-跟唱.mp4"
         )}">跟唱</a>
-        <a class="video-card-dl btn-dl" href="${escapeHtml(dlCello)}" data-download-name="${escapeHtml(
+        <a class="video-card-dl" href="${escapeHtml(dlCello)}" data-download-name="${escapeHtml(
           title + "-大提琴.mp4"
         )}">大提琴</a>
       </div>
@@ -86,12 +95,21 @@ function videoCardHtml(e) {
   </article>`;
 }
 
+async function fetchJson(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 async function loadStaticGalleryManifest() {
-  const res = await fetch(
+  const data = await fetchJson(
     isStaticSite() ? "gallery/manifest.json" : "/TangTang-workbench/gallery/manifest.json"
   );
-  if (!res.ok) return [];
-  const data = await res.json();
+  if (!data) return [];
   const prefix = isStaticSite() ? "gallery" : "/TangTang-workbench/gallery";
   return (Array.isArray(data.entries) ? data.entries : []).map((e) => ({
     ...e,
@@ -103,27 +121,89 @@ async function loadStaticGalleryManifest() {
   }));
 }
 
+/**
+ * 以琴谱库曲目为主列表，合并成片视频信息（保证库里有的都进成片 Tab）
+ */
+function mergeLibraryIntoGallery(libraryEntries, galleryEntries) {
+  const byId = new Map(
+    (galleryEntries || []).map((e) => [e.id, e])
+  );
+  const prefix = isStaticSite() ? "gallery" : "/TangTang-workbench/gallery";
+  const apiPrefix = isStaticSite() ? "gallery" : "/api/gallery";
+
+  const merged = (libraryEntries || []).map((lib) => {
+    const g = byId.get(lib.id);
+    if (g) {
+      byId.delete(lib.id);
+      return {
+        ...g,
+        title: lib.title || g.title,
+        artist: lib.artist || g.artist,
+        posLabel: g.posLabel || null,
+      };
+    }
+    // 库里有、画廊清单暂无：仍按约定路径出卡（有文件就能播）
+    return {
+      id: lib.id,
+      title: lib.title,
+      artist: lib.artist || "未知歌手",
+      posLabel: null,
+      videoUrl: `${prefix}/${lib.id}/cello.mp4`,
+      solfegeUrl: `${prefix}/${lib.id}/solfege.mp4`,
+      posterUrl: `${prefix}/${lib.id}/poster.jpg`,
+      downloadCelloUrl: isStaticSite()
+        ? `${prefix}/${lib.id}/cello.mp4`
+        : `${apiPrefix}/${encodeURIComponent(lib.id)}/download/cello`,
+      downloadSolfegeUrl: isStaticSite()
+        ? `${prefix}/${lib.id}/solfege.mp4`
+        : `${apiPrefix}/${encodeURIComponent(lib.id)}/download/solfege`,
+    };
+  });
+
+  // 画廊里多出来的（不在库中）也保留
+  for (const leftover of byId.values()) merged.push(leftover);
+  return merged;
+}
+
 async function loadGallery() {
   if (!grid) return;
-  let entries = [];
-  try {
-    if (!isStaticSite()) {
-      const res = await fetch("/api/gallery");
-      if (res.ok) {
-        const data = await res.json();
-        entries = Array.isArray(data.entries) ? data.entries : [];
-      }
-    }
-  } catch {
-    entries = [];
+
+  let libraryEntries = [];
+  let galleryEntries = [];
+
+  if (!isStaticSite()) {
+    const [libData, galData, manData] = await Promise.all([
+      fetchJson("/api/library"),
+      fetchJson("/api/gallery"),
+      fetchJson("/TangTang-workbench/gallery/manifest.json"),
+    ]);
+    libraryEntries = Array.isArray(libData?.entries) ? libData.entries : [];
+    galleryEntries = Array.isArray(galData?.entries) ? galData.entries : [];
+    // 补 posLabel（manifest 有、API 可能尚未热更新）
+    const posById = new Map(
+      (Array.isArray(manData?.entries) ? manData.entries : []).map((e) => [
+        e.id,
+        e.posLabel || null,
+      ])
+    );
+    galleryEntries = galleryEntries.map((e) => ({
+      ...e,
+      posLabel: e.posLabel || posById.get(e.id) || null,
+    }));
   }
-  if (!entries.length) {
-    try {
-      entries = await loadStaticGalleryManifest();
-    } catch {
-      entries = [];
-    }
+
+  if (!galleryEntries.length) {
+    galleryEntries = await loadStaticGalleryManifest();
   }
+  if (!libraryEntries.length && galleryEntries.length) {
+    libraryEntries = galleryEntries.map((e) => ({
+      id: e.id,
+      title: e.title,
+      artist: e.artist,
+    }));
+  }
+
+  let entries = mergeLibraryIntoGallery(libraryEntries, galleryEntries);
 
   const q = queryParam("q").trim().toLowerCase();
   if (q) {
@@ -133,20 +213,23 @@ async function loadGallery() {
       const id = String(e.id || "").toLowerCase();
       return title.includes(q) || artist.includes(q) || id.includes(q);
     });
-    if (galleryTitle) galleryTitle.textContent = `「${queryParam("q")}」· ${entries.length} 首`;
+    if (galleryTitle) {
+      galleryTitle.textContent = `「${queryParam("q")}」· ${entries.length} 首`;
+    }
   } else if (galleryTitle) {
-    galleryTitle.textContent = `跟唱 · 大提琴 · ${entries.length} 首`;
+    galleryTitle.textContent = `跟谱视频 · ${entries.length} 首`;
   }
 
   if (galleryMeta) {
     galleryMeta.textContent = entries.length
-      ? "点击播放预览谱面，或下载跟唱 / 大提琴"
-      : "暂无成片";
+      ? `共 ${entries.length} 首 · 点击播放预览谱面，或下载跟唱 / 大提琴`
+      : "暂无成片，可先上传谱面";
   }
 
-  grid.innerHTML = entries.length
-    ? entries.map((e) => videoCardHtml(e)).join("")
-    : `<p class="home-search-empty">没有匹配的成片</p>`;
+  const cards = entries.map((e) => videoCardHtml(e)).join("");
+  grid.innerHTML = `${uploadCardHtml()}${
+    cards || `<p class="home-search-empty gallery-empty">没有匹配的成片</p>`
+  }`;
 
   grid.querySelectorAll("[data-download-name]").forEach((el) => {
     const href = el.getAttribute("href");

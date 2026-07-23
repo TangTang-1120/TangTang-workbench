@@ -137,6 +137,7 @@ export function listGallery() {
         id: e.id,
         title: e.title,
         artist: e.artist || "未知歌手",
+        posLabel: e.posLabel || null,
         videoUrl: `/gallery/${encodeURIComponent(e.id)}/cello.mp4`,
         solfegeUrl: hasSolfege
           ? `/gallery/${encodeURIComponent(e.id)}/solfege.mp4`
