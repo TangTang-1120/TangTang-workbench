@@ -138,8 +138,8 @@ function bindScoreSearch() {
     e.preventDefault();
     const q = (input.value || "").trim();
     const url = q
-      ? `/library.html?q=${encodeURIComponent(q)}#gallery`
-      : `/library.html#gallery`;
+      ? `/gallery.html?q=${encodeURIComponent(q)}`
+      : `/gallery.html`;
     window.location.href = url;
   });
 }

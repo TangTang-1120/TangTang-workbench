@@ -168,7 +168,7 @@ for (const rel of walk(DOCS)) {
 }
 
 // 最后再插 base / static 标记（避免 rewrite 把 base 再改一次）
-for (const name of ["index.html", "library.html", "admin.html"]) {
+for (const name of ["index.html", "library.html", "admin.html", "gallery.html"]) {
   const p = path.join(DOCS, name);
   if (!fs.existsSync(p)) continue;
   let html = fs.readFileSync(p, "utf8");

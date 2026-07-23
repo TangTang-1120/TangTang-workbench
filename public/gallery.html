@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="theme-color" content="#ffffff" />
-    <title>琴谱库 · Tang Tang 𝄢</title>
+    <title>成片 · Tang Tang 𝄢</title>
     <link rel="icon" type="image/png" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,7 +37,7 @@
             <span class="wb-nav-ico" aria-hidden="true">⌂</span>
             首页
           </a>
-          <a class="wb-nav-item" href="/gallery.html" data-wb-nav="gallery">
+          <a class="wb-nav-item is-active" href="/gallery.html" data-wb-nav="gallery">
             <span class="wb-nav-ico" aria-hidden="true">▣</span>
             成片
           </a>
@@ -45,7 +45,7 @@
             <span class="wb-nav-ico" aria-hidden="true">⬆</span>
             上传出片
           </a>
-          <a class="wb-nav-item is-active" href="/library.html" data-wb-nav="library">
+          <a class="wb-nav-item" href="/library.html" data-wb-nav="library">
             <span class="wb-nav-ico" aria-hidden="true">☰</span>
             琴谱库下载
           </a>
@@ -54,20 +54,20 @@
           <p class="wb-section-label">功能描述</p>
           <ul class="wb-feature-list">
             <li>
-              <strong>下载乐谱</strong>
-              <span>MusicXML 一键下载</span>
-            </li>
-            <li>
-              <strong>识谱入库</strong>
-              <span>上传识别后自动进库</span>
-            </li>
-            <li>
               <strong>唱音阶跟唱</strong>
               <span>汤汤音色 · 长音哆234</span>
             </li>
             <li>
               <strong>大提琴示范</strong>
               <span>FluidR3 · 把位染色</span>
+            </li>
+            <li>
+              <strong>指法识别</strong>
+              <span>一把紫 · 中把青 · 高把蓝</span>
+            </li>
+            <li>
+              <strong>固定速度</strong>
+              <span>♩ = 72</span>
             </li>
           </ul>
         </div>
@@ -83,35 +83,36 @@
           ☰
         </button>
         <div class="wb-topbar-title">
-          <strong>琴谱库</strong>
-          <span>下载 MusicXML 谱面</span>
+          <strong>成片</strong>
+          <span>跟唱 · 大提琴 · 谱面预览</span>
         </div>
       </header>
 
-      <main class="shell library-shell">
+      <main class="shell library-shell gallery-shell">
         <header class="library-header">
           <a class="library-back" href="/">← 返回</a>
           <p class="brand">Tang Tang <span class="clef" aria-hidden="true">𝄢</span></p>
-          <h1>琴谱库</h1>
+          <h1>成片</h1>
           <p class="lead library-lead">
-            下载已入库的 MusicXML 谱面。首页上传识别成功后会自动出现在这里。
+            竖屏跟谱成片：点卡片预览谱面，下载跟唱或大提琴。
           </p>
         </header>
 
-        <section class="library-scores" id="scores">
+        <section class="gallery-panel library-gallery" id="gallery">
           <div class="gallery-head">
-            <p class="gallery-kicker">谱面</p>
-            <h2>MusicXML 下载</h2>
+            <p class="gallery-kicker">Gallery</p>
+            <h2 id="gallery-title">跟唱 · 大提琴</h2>
+            <p class="gallery-save-hint">手机可长按视频另存，或点下方按钮下载。</p>
           </div>
-          <p class="library-meta" id="library-meta">加载中…</p>
-          <div class="library-list" id="library-list"></div>
+          <p class="library-meta" id="gallery-meta">加载中…</p>
+          <div class="video-card-grid" id="gallery-grid"></div>
         </section>
       </main>
     </div>
 
     <div class="wb-backdrop" id="wb-backdrop" hidden></div>
     <script src="/download.js"></script>
-    <script src="/library.js"></script>
+    <script src="/gallery.js"></script>
     <script src="/workbench.js"></script>
   </body>
 </html>
