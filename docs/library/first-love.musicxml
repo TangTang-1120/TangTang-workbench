@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC
+  "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+  <work>
+    <work-title>First Love</work-title>
+  </work>
+  <identification>
+    <creator type="composer">Utada Hikaru</creator>
+    <creator type="arranger">Tang Tang · melody only (piano removed) · cello 8va basso</creator>
+    <rights>Educational local demo · violin melody extracted, piano stripped</rights>
+  </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Cello</part-name>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <!-- 原譜為 Violin+Piano；此處只保留旋律，降八度寫成大提琴譜。♩ 由引擎固定 72 -->
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <direction placement="above">
+        <direction-type>
+          <metronome>
+            <beat-unit>quarter</beat-unit>
+            <per-minute>72</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="72"/>
+      </direction>
+      <note><rest/><duration>16</duration><voice>1</voice><type>whole</type></note>
+    </measure>
+    <!-- 開場旋律（對應原小提琴 m2 起） -->
+    <measure number="2">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+    </measure>
+    <measure number="3">
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>down</stem></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+    </measure>
+    <measure number="4">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>up</stem></note>
+      <note><rest/><duration>4</duration><voice>1</voice><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+    </measure>
+    <measure number="5">
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+    </measure>
+    <measure number="6">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+    </measure>
+    <measure number="7">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>up</stem></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>down</stem></note>
+    </measure>
+    <measure number="8">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+    </measure>
+    <measure number="9">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>up</stem></note>
+    </measure>
+    <measure number="10">
+      <note><rest/><duration>4</duration><voice>1</voice><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+    </measure>
+    <measure number="11">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+    </measure>
+    <measure number="12">
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>up</stem></note>
+    </measure>
+    <measure number="13">
+      <note><rest/><duration>16</duration><voice>1</voice><type>whole</type></note>
+    </measure>
+    <measure number="14">
+      <note><rest/><duration>16</duration><voice>1</voice><type>whole</type></note>
+    </measure>
+    <!-- 副歌推進 -->
+    <measure number="15">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>2</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+    </measure>
+    <measure number="16">
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+    </measure>
+    <measure number="17">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+    </measure>
+    <measure number="18">
+      <note><rest/><duration>2</duration><voice>1</voice><type>eighth</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><rest/><duration>2</duration><voice>1</voice><type>eighth</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+    </measure>
+    <measure number="19">
+      <note><rest/><duration>2</duration><voice>1</voice><type>eighth</type></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+      <note><rest/><duration>2</duration><voice>1</voice><type>eighth</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">begin</beam></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">continue</beam></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem><beam number="1">end</beam></note>
+    </measure>
+    <measure number="20">
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>6</duration><voice>1</voice><type>quarter</type><dot/><stem>down</stem></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>2</duration><voice>1</voice><type>eighth</type><stem>up</stem></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>down</stem></note>
+    </measure>
+    <measure number="21">
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>up</stem></note>
+    </measure>
+    <measure number="22">
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>up</stem></note>
+      <note><pitch><step>E</step><octave>3</octave></pitch><duration>4</duration><voice>1</voice><type>quarter</type><stem>down</stem></note>
+    </measure>
+    <measure number="23">
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>down</stem></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>8</duration><voice>1</voice><type>half</type><stem>down</stem></note>
+      <barline location="right"><bar-style>light-heavy</bar-style></barline>
+    </measure>
+  </part>
+</score-partwise>

@@ -12,6 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOCS = path.join(ROOT, "docs");
 const PUBLIC = path.join(ROOT, "public");
 const GALLERY = path.join(ROOT, "output", "gallery");
+const LIBRARY = path.join(ROOT, "scores", "library");
 const BASE = "/TangTang-workbench/";
 
 function rmrf(p) {
@@ -62,7 +63,7 @@ function rewriteSitePaths(text) {
   // JS 字符串里的静态资源路径
   out = out.replace(
     new RegExp(
-      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|hero-cello\\.js|score-cello\\.js|theme\\.js|workbench\\.js|gallery\\.js|admin\\.js|library\\.js)`,
+      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|library|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|hero-cello\\.js|score-cello\\.js|theme\\.js|workbench\\.js|gallery\\.js|admin\\.js|library\\.js)`,
       "g"
     ),
     (_, q, rest) => `${q}${BASE}${rest}`
@@ -75,6 +76,16 @@ fs.mkdirSync(DOCS, { recursive: true });
 copyDir(PUBLIC, DOCS);
 if (fs.existsSync(GALLERY)) {
   copyDir(GALLERY, path.join(DOCS, "gallery"));
+}
+// 同步琴谱库 MusicXML，供公网静态下载
+if (fs.existsSync(LIBRARY)) {
+  copyDir(LIBRARY, path.join(DOCS, "library"));
+  console.log(
+    `Synced library: ${
+      fs.readdirSync(path.join(DOCS, "library")).filter((n) => n.endsWith(".musicxml"))
+        .length
+    } scores`
+  );
 }
 
 fs.writeFileSync(path.join(DOCS, ".nojekyll"), "");
