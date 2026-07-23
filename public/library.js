@@ -69,7 +69,7 @@ function videoCardHtml(e) {
   const artist = e.artist || "未知歌手";
   const id = e.id || "";
   const poster = e.posterUrl || (e.hasPoster ? `/gallery/${id}/poster.jpg` : "");
-  const videoSrc = e.videoUrl || e.solfegeUrl || `/gallery/${id}/solfege.mp4`;
+  const videoSrc = e.solfegeUrl || e.videoUrl || `/gallery/${id}/solfege.mp4`;
   const dlSol =
     e.downloadSolfegeUrl ||
     (isStaticSite()
@@ -87,15 +87,19 @@ function videoCardHtml(e) {
       )}</span>`
     : "";
 
+  // 成片卡片：先展示谱面海报（完整可见），点击再播
+  const media = poster
+    ? `<button type="button" class="video-card-poster" data-play-src="${escapeHtml(
+        videoSrc
+      )}" aria-label="播放 ${escapeHtml(title)}">
+        <img src="${escapeHtml(poster)}" alt="${escapeHtml(title)} 谱面预览" loading="lazy" />
+        <span class="video-card-play" aria-hidden="true">▶</span>
+      </button>`
+    : `<video src="${escapeHtml(videoSrc)}" controls playsinline preload="metadata"></video>`;
+
   return `<article class="video-card">
     <div class="video-card-media">
-      <video
-        src="${escapeHtml(videoSrc)}"
-        ${poster ? `poster="${escapeHtml(poster)}"` : ""}
-        controls
-        playsinline
-        preload="metadata"
-      ></video>
+      ${media}
     </div>
     <div class="video-card-body">
       <h3 class="video-card-title">
@@ -183,6 +187,16 @@ async function loadGallery() {
     const href = el.getAttribute("href");
     const name = el.getAttribute("data-download-name") || "video.mp4";
     bindDownload(el, href, { filename: name, album: true });
+  });
+
+  galleryGrid.querySelectorAll("[data-play-src]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-play-src");
+      if (!src) return;
+      const wrap = btn.closest(".video-card-media");
+      if (!wrap) return;
+      wrap.innerHTML = `<video src="${src}" controls playsinline autoplay></video>`;
+    });
   });
 }
 
