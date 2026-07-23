@@ -1,6 +1,6 @@
 /**
  * 构建 GitHub Pages 静态站（与 tangtang-daily / dehong 同方式）
- * 输出到 docs/ → https://tangtang-1120.github.io/TangTang-score-video/
+ * 输出到 docs/ → https://tangtang-1120.github.io/TangTang-workbench/
  *
  * 注意：以 / 开头的绝对路径会打到 github.io 根目录，必须改成带仓库前缀。
  */
@@ -12,7 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOCS = path.join(ROOT, "docs");
 const PUBLIC = path.join(ROOT, "public");
 const GALLERY = path.join(ROOT, "output", "gallery");
-const BASE = "/TangTang-score-video/";
+const BASE = "/TangTang-workbench/";
 
 function rmrf(p) {
   fs.rmSync(p, { recursive: true, force: true });
@@ -178,4 +178,4 @@ if (!html.includes('meta name="tang-static"')) {
 }
 
 console.log("Built docs/ for GitHub Pages");
-console.log("URL: https://tangtang-1120.github.io/TangTang-score-video/");
+console.log("URL: https://tangtang-1120.github.io/TangTang-workbench/");

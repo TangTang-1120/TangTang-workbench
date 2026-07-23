@@ -65,7 +65,7 @@ async function loadLibrary() {
           <h2>还没有可下载曲目</h2>
           <p>回首页上传谱面，识别成功后会自动入库供下载</p>
         </div>
-        <a class="btn-dl library-dl" href="/TangTang-score-video/">回首页上传</a>
+        <a class="btn-dl library-dl" href="/TangTang-workbench/">回首页上传</a>
       `;
       listEl.appendChild(empty);
       return;

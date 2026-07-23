@@ -438,7 +438,7 @@
     const src = siteUrl("audio/first-love-cello.mp3");
     const alt = siteUrl("audio/hao-jiu-bu-jian-cello.mp3");
     const cur = audioEl.currentSrc || "";
-    // 避免用 "/TangTang-score-video/audio/" 字样（Pages 构建脚本会误改写）
+    // 避免用 "/TangTang-workbench/audio/" 字样（Pages 构建脚本会误改写）
     const ok =
       !audioEl.error &&
       (cur.includes("first-love-cello") || cur.includes("hao-jiu-bu-jian-cello"));
