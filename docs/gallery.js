@@ -260,7 +260,12 @@ async function loadGallery() {
   grid.querySelectorAll("[data-download-name]").forEach((el) => {
     const href = el.getAttribute("href");
     const name = el.getAttribute("data-download-name") || "video.mp4";
-    bindDownload(el, href, { filename: name, album: true });
+    const title =
+      el
+        .closest(".video-card")
+        ?.querySelector(".video-card-title-text")
+        ?.textContent?.trim() || name.replace(/\.mp4$/i, "");
+    bindDownload(el, href, { filename: name, album: true, title });
   });
 }
 

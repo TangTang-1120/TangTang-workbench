@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0b1220" />
+    <title>存到照片 · Tang Tang</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #0b1220;
+        color: #e8eef6;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Noto Sans SC", sans-serif;
+      }
+      .save-wrap {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 16px 16px 40px;
+        box-sizing: border-box;
+      }
+      .save-title {
+        margin: 8px 0 4px;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .save-sub {
+        margin: 0 0 14px;
+        color: #9fb0c3;
+        font-size: 0.86rem;
+        line-height: 1.5;
+      }
+      .save-video {
+        width: 100%;
+        max-height: 70vh;
+        border-radius: 12px;
+        background: #000;
+        display: block;
+      }
+      .save-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .save-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        border: 0;
+        border-radius: 12px;
+        background: #14b8a6;
+        color: #041016;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .save-btn:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      .save-btn.ghost {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #e8eef6;
+        text-decoration: none;
+      }
+      .save-steps {
+        margin: 16px 0 0;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #c5d3e2;
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
+      .save-steps strong {
+        color: #fff;
+      }
+      .wechat-banner {
+        display: none;
+        margin: 0 0 14px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #be185d;
+        color: #fff;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        font-weight: 600;
+      }
+      .wechat-banner.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="save-wrap">
+      <div class="wechat-banner" id="wechat-banner">
+        当前是微信内置浏览器，无法直接存相册。请点右上角 ··· →
+       「在浏览器中打开」，再用下面按钮保存。
+      </div>
+      <h1 class="save-title" id="title">成片</h1>
+      <p class="save-sub" id="sub">点下方绿色按钮，在系统菜单里选「存储到照片」。</p>
+      <video
+        id="player"
+        class="save-video"
+        controls
+        playsinline
+        webkit-playsinline
+        preload="auto"
+      ></video>
+      <div class="save-actions">
+        <button type="button" class="save-btn" id="btn-save">存到照片 / 相册</button>
+        <a class="save-btn ghost" id="btn-open" href="#" target="_blank" rel="noopener"
+          >直接打开视频文件</a
+        >
+        <a class="save-btn ghost" id="btn-back" href="/gallery.html">返回成片</a>
+      </div>
+      <div class="save-steps" id="steps">
+        <strong>如果按钮没反应：</strong><br />
+        1）先点播放，等视频出现画面<br />
+        2）再点绿色「存到照片」<br />
+        3）在弹出菜单选「存储到照片 / 存储视频」<br />
+        4）仍不行：点「直接打开视频文件」，用系统播放器分享保存
+      </div>
+    </div>
+    <script src="/download.js"></script>
+    <script>
+      (function () {
+        const params = new URLSearchParams(location.search);
+        const src = params.get("src") || "";
+        const name = params.get("name") || "tangtang-video.mp4";
+        const title = params.get("title") || "成片";
+        const player = document.getElementById("player");
+        const btnSave = document.getElementById("btn-save");
+        const btnOpen = document.getElementById("btn-open");
+        const btnBack = document.getElementById("btn-back");
+        const wechatBanner = document.getElementById("wechat-banner");
+
+        document.getElementById("title").textContent = title;
+
+        function abs(url) {
+          try {
+            return new URL(url, document.baseURI || location.href).href;
+          } catch {
+            return url;
+          }
+        }
+
+        if (!src) {
+          document.getElementById("sub").textContent = "缺少视频地址";
+          btnSave.disabled = true;
+          return;
+        }
+
+        const videoUrl = abs(src);
+        player.src = videoUrl;
+        btnOpen.href = videoUrl;
+
+        // 返回链接兼容 GitHub Pages base
+        try {
+          const base = document.querySelector("base")?.href;
+          if (base) btnBack.href = new URL("gallery.html", base).href;
+        } catch {
+          /* ignore */
+        }
+
+        const ua = navigator.userAgent || "";
+        const inWeChat = /MicroMessenger|QQ\//i.test(ua);
+        if (inWeChat) wechatBanner.classList.add("show");
+
+        btnSave.addEventListener("click", async () => {
+          if (inWeChat) {
+            alert(
+              "微信里存不了相册。\n请点右上角 ··· →「在浏览器中打开」，再点绿色按钮。"
+            );
+            return;
+          }
+          if (!window.TangDownload?.saveMediaToAlbum) {
+            location.href = videoUrl;
+            return;
+          }
+          const prev = btnSave.textContent;
+          btnSave.disabled = true;
+          btnSave.textContent = "正在准备视频…";
+          try {
+            await window.TangDownload.saveMediaToAlbum(videoUrl, name);
+          } catch (err) {
+            // 最后手段：跳到原生视频地址
+            alert(
+              "自动保存失败，将打开视频文件。\n请用播放器分享菜单「存储到照片」。"
+            );
+            location.href = videoUrl;
+          } finally {
+            btnSave.disabled = false;
+            btnSave.textContent = prev;
+          }
+        });
+
+        // 预加载一点，提高分享成功率
+        player.addEventListener(
+          "loadeddata",
+          () => {
+            document.getElementById("sub").textContent =
+              "视频已就绪，点绿色按钮存到照片。";
+          },
+          { once: true }
+        );
+      })();
+    </script>
+  </body>
+</html>
