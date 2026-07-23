@@ -9,6 +9,35 @@ function isStaticSite() {
   return Boolean(document.querySelector('meta[name="tang-static"]'));
 }
 
+/** 站点根路径：兼容 GitHub Pages / 本机，避免手机相对路径解析错误 */
+function siteRoot() {
+  const baseEl = document.querySelector("base");
+  if (baseEl?.href) {
+    try {
+      const u = new URL(baseEl.href, location.href);
+      let p = u.pathname;
+      if (!p.endsWith("/")) p += "/";
+      return p;
+    } catch {
+      /* fall through */
+    }
+  }
+  const path = location.pathname || "/";
+  if (path.includes("/TangTang-workbench/")) return "/TangTang-workbench/";
+  // /gallery.html → /
+  if (path.endsWith(".html")) {
+    const dir = path.slice(0, path.lastIndexOf("/") + 1);
+    return dir || "/";
+  }
+  return path.endsWith("/") ? path : `${path}/`;
+}
+
+function assetUrl(rel) {
+  const root = siteRoot();
+  const clean = String(rel || "").replace(/^\/+/, "");
+  return `${root}${clean}`;
+}
+
 function escapeHtml(s) {
   return String(s || "")
     .replace(/&/g, "&amp;")
@@ -36,7 +65,9 @@ function queryParam(name) {
 }
 
 function uploadCardHtml() {
-  return `<a class="video-card video-card-upload" href="/TangTang-workbench/#upload-panel" aria-label="上传谱面">
+  return `<a class="video-card video-card-upload" href="${escapeHtml(
+    `${siteRoot()}#upload-panel`
+  )}" aria-label="上传谱面">
     <div class="video-card-upload-inner">
       <span class="video-card-upload-plus" aria-hidden="true">+</span>
       <strong>上传</strong>
@@ -49,23 +80,24 @@ function videoCardHtml(e) {
   const title = e.title || "成片";
   const artist = e.artist || "未知歌手";
   const id = e.id || "";
-  const poster = e.posterUrl
-    ? `poster="${escapeHtml(e.posterUrl)}"`
-    : e.hasPoster
-      ? `poster="${escapeHtml(`/TangTang-workbench/gallery/${id}/poster.jpg`)}"`
-      : "";
+  const posterUrl =
+    e.posterUrl ||
+    (e.hasPoster ? assetUrl(`gallery/${id}/poster.jpg`) : "");
+  const poster = posterUrl ? `poster="${escapeHtml(posterUrl)}"` : "";
   const videoSrc =
-    e.videoUrl || e.solfegeUrl || `/TangTang-workbench/gallery/${encodeURIComponent(id)}/cello.mp4`;
+    e.videoUrl ||
+    e.solfegeUrl ||
+    assetUrl(`gallery/${encodeURIComponent(id)}/cello.mp4`);
   const dlCello =
     e.downloadCelloUrl ||
     e.downloadUrl ||
     (isStaticSite()
-      ? `gallery/${id}/cello.mp4`
+      ? assetUrl(`gallery/${id}/cello.mp4`)
       : `/api/gallery/${encodeURIComponent(id)}/download/cello`);
   const dlSolfege =
     e.downloadSolfegeUrl ||
     (isStaticSite()
-      ? `gallery/${id}/solfege.mp4`
+      ? assetUrl(`gallery/${id}/solfege.mp4`)
       : `/api/gallery/${encodeURIComponent(id)}/download/solfege`);
   const pos = e.posLabel
     ? `<span class="video-card-pos" data-pos="${escapeHtml(e.posLabel)}">${escapeHtml(
@@ -97,7 +129,7 @@ function videoCardHtml(e) {
 
 async function fetchJson(url) {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -106,11 +138,10 @@ async function fetchJson(url) {
 }
 
 async function loadStaticGalleryManifest() {
-  const data = await fetchJson(
-    isStaticSite() ? "gallery/manifest.json" : "/TangTang-workbench/gallery/manifest.json"
-  );
+  const bust = `v=${Date.now()}`;
+  const data = await fetchJson(`${assetUrl("gallery/manifest.json")}?${bust}`);
   if (!data) return [];
-  const prefix = isStaticSite() ? "gallery" : "/TangTang-workbench/gallery";
+  const prefix = assetUrl("gallery").replace(/\/$/, "");
   return (Array.isArray(data.entries) ? data.entries : []).map((e) => ({
     ...e,
     videoUrl: `${prefix}/${e.id}/cello.mp4`,
@@ -125,11 +156,8 @@ async function loadStaticGalleryManifest() {
  * 以琴谱库曲目为主列表，合并成片视频信息（保证库里有的都进成片 Tab）
  */
 function mergeLibraryIntoGallery(libraryEntries, galleryEntries) {
-  const byId = new Map(
-    (galleryEntries || []).map((e) => [e.id, e])
-  );
-  const prefix = isStaticSite() ? "gallery" : "/TangTang-workbench/gallery";
-  const apiPrefix = isStaticSite() ? "gallery" : "/api/gallery";
+  const byId = new Map((galleryEntries || []).map((e) => [e.id, e]));
+  const prefix = assetUrl("gallery").replace(/\/$/, "");
 
   const merged = (libraryEntries || []).map((lib) => {
     const g = byId.get(lib.id);
@@ -142,7 +170,6 @@ function mergeLibraryIntoGallery(libraryEntries, galleryEntries) {
         posLabel: g.posLabel || null,
       };
     }
-    // 库里有、画廊清单暂无：仍按约定路径出卡（有文件就能播）
     return {
       id: lib.id,
       title: lib.title,
@@ -153,14 +180,13 @@ function mergeLibraryIntoGallery(libraryEntries, galleryEntries) {
       posterUrl: `${prefix}/${lib.id}/poster.jpg`,
       downloadCelloUrl: isStaticSite()
         ? `${prefix}/${lib.id}/cello.mp4`
-        : `${apiPrefix}/${encodeURIComponent(lib.id)}/download/cello`,
+        : `/api/gallery/${encodeURIComponent(lib.id)}/download/cello`,
       downloadSolfegeUrl: isStaticSite()
         ? `${prefix}/${lib.id}/solfege.mp4`
-        : `${apiPrefix}/${encodeURIComponent(lib.id)}/download/solfege`,
+        : `/api/gallery/${encodeURIComponent(lib.id)}/download/solfege`,
     };
   });
 
-  // 画廊里多出来的（不在库中）也保留
   for (const leftover of byId.values()) merged.push(leftover);
   return merged;
 }
@@ -175,11 +201,10 @@ async function loadGallery() {
     const [libData, galData, manData] = await Promise.all([
       fetchJson("/api/library"),
       fetchJson("/api/gallery"),
-      fetchJson("/TangTang-workbench/gallery/manifest.json"),
+      fetchJson(`${assetUrl("gallery/manifest.json")}?v=${Date.now()}`),
     ]);
     libraryEntries = Array.isArray(libData?.entries) ? libData.entries : [];
     galleryEntries = Array.isArray(galData?.entries) ? galData.entries : [];
-    // 补 posLabel（manifest 有、API 可能尚未热更新）
     const posById = new Map(
       (Array.isArray(manData?.entries) ? manData.entries : []).map((e) => [
         e.id,
@@ -192,6 +217,7 @@ async function loadGallery() {
     }));
   }
 
+  // 静态站 / API 失败：一律读 manifest，保证手机也能看到成片
   if (!galleryEntries.length) {
     galleryEntries = await loadStaticGalleryManifest();
   }
