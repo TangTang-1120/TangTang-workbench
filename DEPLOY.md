@@ -2,7 +2,25 @@
 
 仓库：https://github.com/TangTang-1120/TangTang-workbench
 
-## 推荐（快）：Fly.io · 新加坡 · 常驻
+## 国内用户首选：腾讯云 / 阿里云轻量（可直连）
+
+`workers.dev` 国内常需 VPN。国内站部署说明：
+
+→ **[`deploy/china/README.md`](./deploy/china/README.md)**
+
+买好机器后把公网 IP 发我，或 SSH 上执行一键脚本即可。
+
+## Cloudflare（海外 / 需可访问 workers.dev）
+
+成片浏览/播放可走 R2（流出免费），API 走 Workers。出片渲染仍在本机或国内机。
+
+清单：[`cloudflare/CHECKLIST.md`](./cloudflare/CHECKLIST.md)
+
+## GitHub Pages（静态镜像，国内一般可开）
+
+https://tangtang-1120.github.io/TangTang-workbench/
+
+## 备选：Fly.io · 新加坡 · 常驻
 
 比 Render 免费版快很多（无长时间休眠冷启动）。
 
