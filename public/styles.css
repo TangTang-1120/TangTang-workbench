@@ -1245,6 +1245,314 @@ html[data-theme="dark"] .library-row p {
   display: none !important;
 }
 
+/* ========== PC 邮箱登录页（双栏构图） ========== */
+body.is-login-page {
+  min-height: 100vh;
+  background: #eef3f0;
+  color: #1a2421;
+}
+
+body.is-login-page .atmosphere {
+  display: none;
+}
+
+.login-stage {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+}
+
+.login-visual {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(15, 118, 110, 0.12), transparent 42%),
+    linear-gradient(335deg, rgba(26, 36, 33, 0.06), transparent 50%),
+    #f7faf8;
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 5vw, 72px);
+}
+
+.login-visual-glow {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 50% 42% at 30% 28%, rgba(15, 118, 110, 0.22), transparent 62%),
+    radial-gradient(ellipse 42% 38% at 78% 72%, rgba(180, 140, 90, 0.14), transparent 60%);
+  animation: login-glow 10s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes login-glow {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(1.5%, 1.5%, 0) scale(1.04);
+  }
+}
+
+.login-visual-art {
+  position: relative;
+  z-index: 1;
+  width: min(72%, 520px);
+  max-height: 68vh;
+  object-fit: contain;
+  filter: drop-shadow(0 28px 48px rgba(26, 36, 33, 0.18));
+  animation: login-art-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes login-art-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.login-visual-copy {
+  position: absolute;
+  left: clamp(28px, 4vw, 56px);
+  bottom: clamp(28px, 4vw, 48px);
+  z-index: 2;
+  animation: login-copy-in 0.8s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes login-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.login-brand {
+  margin: 0;
+  font-family: Fraunces, "Noto Serif SC", Georgia, serif;
+  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #12201c;
+}
+
+.login-brand span {
+  color: #0f766e;
+}
+
+.login-tagline {
+  margin: 10px 0 0;
+  font-size: 1.05rem;
+  color: #5a6b64;
+  letter-spacing: 0.04em;
+}
+
+.login-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 6vh, 80px) clamp(36px, 5vw, 72px);
+  background: #fff;
+  border-left: 1px solid rgba(26, 36, 33, 0.08);
+  animation: login-panel-in 0.7s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes login-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.login-home {
+  position: absolute;
+  top: 28px;
+  left: clamp(36px, 5vw, 72px);
+  color: #5a6b64;
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.login-home:hover {
+  color: #0f766e;
+}
+
+.login-panel-inner {
+  width: min(100%, 400px);
+  margin: 0 auto;
+}
+
+.login-heading {
+  margin-bottom: 28px;
+}
+
+.login-kicker {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.login-heading h1 {
+  margin: 0;
+  font-family: Fraunces, "Noto Serif SC", Georgia, serif;
+  font-size: clamp(1.8rem, 2.4vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #12201c;
+  line-height: 1.2;
+}
+
+.login-sub {
+  margin: 12px 0 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #5a6b64;
+}
+
+.login-form {
+  display: grid;
+  gap: 4px;
+}
+
+.login-label {
+  display: block;
+  margin: 0 0 8px;
+  color: #3d4d47;
+  font-size: 0.92rem;
+}
+
+.login-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 1.05rem;
+  padding: 14px 16px;
+  border: 1px solid rgba(26, 36, 33, 0.16);
+  border-radius: 10px;
+  background: #f7faf8;
+  color: #12201c;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.login-input:focus {
+  border-color: #0f766e;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.login-cta {
+  width: 100%;
+  margin-top: 14px;
+  min-height: 48px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.login-sent,
+.login-ok {
+  margin: 0 0 12px;
+  color: #0f766e;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.login-dev-code {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.login-back-email {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.login-done-actions {
+  display: grid;
+  gap: 10px;
+}
+
+body.is-login-page .admin-error {
+  color: #b45309;
+  min-height: 1.3em;
+  margin: 8px 0 0;
+}
+
+@media (max-width: 960px) {
+  .login-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    min-height: 38vh;
+    padding: 28px 24px 72px;
+  }
+
+  .login-visual-art {
+    width: min(58%, 280px);
+    max-height: 28vh;
+  }
+
+  .login-brand {
+    font-size: 2rem;
+  }
+
+  .login-panel {
+    border-left: 0;
+    border-top: 1px solid rgba(26, 36, 33, 0.08);
+    padding-top: 56px;
+  }
+
+  .login-home {
+    top: 18px;
+    left: 24px;
+  }
+}
+
+.wb-topbar-login {
+  margin-left: auto;
+  margin-right: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 118, 110, 0.25);
+  color: #0f766e;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wb-topbar-login:hover {
+  background: rgba(15, 118, 110, 0.08);
+}
+
+html[data-theme="light"] .wb-topbar-login {
+  border-color: rgba(15, 118, 110, 0.28);
+  color: #0f766e;
+}
+
 /* ========== 侧栏（默认隐藏，浅色工作台才显示） ========== */
 .wb-sidebar,
 .wb-topbar,

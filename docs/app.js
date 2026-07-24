@@ -84,6 +84,17 @@ async function watchJob(job) {
   showResults(cur);
 }
 
+async function isCloudContribute() {
+  try {
+    const res = await fetch("/api/health", { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    return data.runtime === "cloudflare";
+  } catch {
+    return false;
+  }
+}
+
 async function startUpload(file) {
   if (!file) return;
   setFile(file);
@@ -100,6 +111,17 @@ async function startUpload(file) {
     const up = await fetch("/api/upload", { method: "POST", body });
     const job = await up.json();
     if (!up.ok) throw new Error(job.error || "上传失败");
+
+    // Cloudflare：只进库排队，站长稍后本机出片
+    if (job.mode === "contribute" || (await isCloudContribute())) {
+      bar.style.width = "100%";
+      statusEl.textContent =
+        job.message ||
+        "已收到谱面！已进入曲库排队，站长有空会批量出片（不会立刻出视频）。";
+      submit.disabled = false;
+      return;
+    }
+
     await watchJob(job);
   } catch (err) {
     statusEl.textContent = err.message || "出错了";

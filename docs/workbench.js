@@ -121,5 +121,24 @@
         }
       }
     });
+
+    // 顶栏 / 侧栏显示登录状态
+    const loginLink = document.getElementById("wb-login-link");
+    const loginNav = document.querySelector('[data-wb-nav="login"] .wb-nav-label');
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data?.ok || !data.email) return;
+        const short =
+          data.email.length > 18
+            ? `${data.email.slice(0, 12)}…`
+            : data.email;
+        if (loginLink) {
+          loginLink.textContent = short;
+          loginLink.title = data.email;
+        }
+        if (loginNav) loginNav.textContent = "已登录";
+      })
+      .catch(() => {});
   });
 })();

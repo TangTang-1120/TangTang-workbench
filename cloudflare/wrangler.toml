@@ -1,0 +1,32 @@
+# Tang Tang · Cloudflare Worker + Assets + D1 + R2
+name = "tangtang-workbench"
+main = "src/worker.js"
+compatibility_date = "2025-07-01"
+workers_dev = true
+
+[assets]
+directory = "./site"
+binding = "ASSETS"
+not_found_handling = "none"
+run_worker_first = ["/api/*", "/gallery/*", "/library/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tangtang-db"
+database_id = "60664cd5-c0cf-4859-92eb-7e381938a49d"
+preview_database_id = "60664cd5-c0cf-4859-92eb-7e381938a49d"
+
+# R2：需在 Dashboard 先开通 R2 后再取消下面注释并 npm run sync
+# [[r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "tangtang-media"
+# preview_bucket_name = "tangtang-media"
+
+[vars]
+APP_NAME = "Tang Tang"
+RENDER_HOOK_SECRET = "change-me"
+# 邮箱登录：未配置 Resend 时页面会直接显示验证码
+AUTH_OPEN = "1"
+AUTH_DEV_SHOW_CODE = "1"
+# AUTH_ALLOWLIST = "you@example.com"
+# AUTH_FROM_EMAIL = "Tang Tang <onboarding@resend.dev>"

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f4f7f5" />
+    <title>登录 · Tang Tang 𝄢</title>
+    <link rel="icon" type="image/png" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Serif+SC:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/theme.js"></script>
+  </head>
+  <body class="is-login-page" data-theme="light">
+    <div class="login-stage">
+      <aside class="login-visual" aria-hidden="true">
+        <div class="login-visual-glow"></div>
+        <img
+          class="login-visual-art"
+          src="/assets/cello-score-art.png"
+          alt=""
+        />
+        <div class="login-visual-copy">
+          <p class="login-brand">Tang Tang <span aria-hidden="true">𝄢</span></p>
+          <p class="login-tagline">大提琴跟谱工作台</p>
+        </div>
+      </aside>
+
+      <main class="login-panel">
+        <a class="login-home" href="/">← 返回工作台</a>
+
+        <div class="login-panel-inner">
+          <header class="login-heading">
+            <p class="login-kicker">Account</p>
+            <h1>用邮箱登录</h1>
+            <p class="login-sub">
+              登录后可贡献琴谱进库；成片由站长稍后批量制作。
+            </p>
+          </header>
+
+          <section class="login-form" id="login-card">
+            <div id="step-email">
+              <label class="login-label" for="email">邮箱</label>
+              <input
+                id="email"
+                class="login-input"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="name@example.com"
+                required
+              />
+              <p class="admin-error" id="email-error"></p>
+              <button type="button" class="cta login-cta" id="btn-send">
+                发送验证码
+              </button>
+            </div>
+
+            <div id="step-code" class="hidden">
+              <p class="login-sent" id="sent-hint">验证码已发送</p>
+              <p class="login-dev-code hidden" id="dev-code"></p>
+              <label class="login-label" for="code">6 位验证码</label>
+              <input
+                id="code"
+                class="login-input"
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                placeholder="••••••"
+              />
+              <p class="admin-error" id="code-error"></p>
+              <button type="button" class="cta login-cta" id="btn-verify">
+                进入工作台
+              </button>
+              <button
+                type="button"
+                class="ghost login-back-email"
+                id="btn-back-email"
+              >
+                换个邮箱
+              </button>
+            </div>
+
+            <div id="step-done" class="hidden">
+              <p class="login-ok" id="done-msg">已登录</p>
+              <div class="login-done-actions">
+                <a class="cta login-cta" href="/#upload-panel">去贡献琴谱</a>
+                <a class="ghost" href="/gallery.html">看成片</a>
+                <button type="button" class="ghost" id="btn-logout">
+                  退出登录
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script src="/auth.js"></script>
+  </body>
+</html>

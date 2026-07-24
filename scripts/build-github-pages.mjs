@@ -63,7 +63,7 @@ function rewriteSitePaths(text) {
   // JS 字符串里的静态资源路径
   out = out.replace(
     new RegExp(
-      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|library|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|hero-cello\\.js|score-cello\\.js|theme\\.js|workbench\\.js|gallery\\.js|admin\\.js|library\\.js|save-video\\.html)`,
+      `(["'\`])\\/(?!${BASE_NAME}\\/)(audio|assets|gallery|library|favicon[^"'\`]*|apple-touch-icon\\.png|styles\\.css|app\\.js|download\\.js|auth\\.js|hero-cello\\.js|score-cello\\.js|theme\\.js|workbench\\.js|gallery\\.js|admin\\.js|library\\.js|save-video\\.html|login\\.html)`,
       "g"
     ),
     (_, q, rest) => `${q}${BASE}${rest}`
@@ -179,7 +179,7 @@ for (const rel of walk(DOCS)) {
 }
 
 // 最后再插 base / static 标记（避免 rewrite 把 base 再改一次）
-for (const name of ["index.html", "library.html", "admin.html", "gallery.html", "save-video.html"]) {
+for (const name of ["index.html", "library.html", "admin.html", "gallery.html", "save-video.html", "login.html"]) {
   const p = path.join(DOCS, name);
   if (!fs.existsSync(p)) continue;
   let html = fs.readFileSync(p, "utf8");

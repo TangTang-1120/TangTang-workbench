@@ -1,0 +1,18 @@
+{
+  "name": "tangtang-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "sync": "node scripts/sync-media.mjs",
+    "deploy": "npm run build:site && wrangler deploy",
+    "build:site": "node scripts/build-site.mjs",
+    "dev": "npm run build:site && wrangler dev",
+    "bridge": "node scripts/render-bridge.mjs",
+    "pull": "node scripts/batch-pull.mjs",
+    "login": "wrangler login"
+  },
+  "devDependencies": {
+    "wrangler": "^4.24.0"
+  }
+}
